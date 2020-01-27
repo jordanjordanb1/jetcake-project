@@ -1,0 +1,58 @@
+.register-container {
+    z-index: -2;
+    transform: scale(0.9) translateX(100px);
+    opacity: 0.6;
+    pointer-events: none;
+
+    .register-buttons > button {
+        &:not(:last-child) {
+            opacity: 1 !important;
+        }
+    }
+}
+
+.show-register {
+    animation: show-register 500ms ease-out forwards;
+}
+
+.hide-register {
+    animation: hide-register 500ms ease-out forwards;
+}
+
+@keyframes show-register {
+    0% {
+        z-index: -1;
+        transform: scale(0.9) translateX(100px);
+        opacity: 0.6;
+        pointer-events: none;
+    }
+
+    100% {
+        z-index: 1;
+        transform: scale(1) translateX(0);
+        opacity: 1;
+        pointer-events: initial;
+        box-shadow: 3px 3px 5px -2px rgba(0, 0, 0, 0.3);
+    }
+}
+
+@keyframes hide-register {
+    0% {
+        z-index: 1;
+        transform: scale(1) translateX(0);
+        opacity: 1;
+        pointer-events: initial;
+    }
+
+    50% {
+        transform: scale(1) translateX(400px);
+    }
+
+    100% {
+        z-index: -1;
+        transform: scale(0.9) translateX(100px);
+        opacity: 0.6;
+        pointer-events: none;
+        box-shadow: 2px 2px 5px -2px rgba(0, 0, 0, 0.3);
+    }
+}

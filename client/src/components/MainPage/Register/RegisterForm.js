@@ -82,7 +82,7 @@ const RegisterForm = ({ setContainer, history, authenticate }) => {
 
                             authenticate(token, email) // Adds token and email to redux store for easy access
 
-                            setTimeout(history.push('/setup/stepone'), 200) // Redirects to security question step
+                            setTimeout(history.push('/login'), 200) // Redirects to security question step
 
                             return true
                         }

@@ -44,7 +44,7 @@ const LoginForm = ({ setContainer, history, authenticate }) => {
 
                             authenticate(token, email) // Adds token and email to redux store for easy access
 
-                            setTimeout(history.push('/dashboard'), 200)
+                            setTimeout(history.push('/login'), 200)
 
                             return true
                         }

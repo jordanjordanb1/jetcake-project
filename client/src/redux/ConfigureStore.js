@@ -4,7 +4,7 @@ import { isProd } from "../config";
 import thunk from "redux-thunk";
 import logger from "redux-logger";
 
-import { todo } from "./reducers/todo";
+import { user } from "./reducers/user";
 
 export const ConfigureStore = () => {
     let middleware = [];
@@ -19,7 +19,7 @@ export const ConfigureStore = () => {
         window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
     const store = createStore(
-        combineReducers(todo),
+        combineReducers({ user }),
         composeEnhancers(applyMiddleware(...middleware))
     );
 

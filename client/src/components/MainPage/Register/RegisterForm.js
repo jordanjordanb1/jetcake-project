@@ -13,23 +13,28 @@ import { withRouter } from 'react-router'
 
 const RegisterForm = ({ setContainer, history }) => {
     const [formStatus, setFormStatus] = useState(),
-        [formMsg, setFormMsg] = useState()
+        [formMsg, setFormMsg] = useState(),
+        [email, setEmail] = useState()
 
     const RegisterSchema = Yup.object().shape({
         register: Yup.object().shape({
             email: Yup.string().trim()
                 .required('Email is required')
                 .email("Email must be valid")
-                .test('email-exists', "Email is already registered", async (email) => {
-                    return await axios.get('/users/verifyemail', { params: { email } }).then(res => {
-                        const { found } = res.data
+                .test('email-exists', "Email is already registered", async (typedEmail) => {
+                    // Checks to see if new email was typed so server doesn't get spammed
+                    if (typedEmail !== email) {
+                        return await axios.get('/users/verifyemail', { params: { email } }).then(res => {
+                            const { found } = res.data
+                            setEmail(email)
 
-                        if (found) {
-                            return false // Email found
-                        }
+                            if (found) {
+                                return false // Email found
+                            }
 
-                        return true // Email not found
-                    })
+                            return true // Email not found
+                        })
+                    }
                 }),
             password: Yup.string()
                 .required('Password is required')
@@ -95,7 +100,7 @@ const RegisterForm = ({ setContainer, history }) => {
             {({ isSubmitting, resetForm }) => (
                 <Form>
                     <Row>
-                        <Col xs="12" md={{ span: 10, offset: 1 }}>
+                        <Col xs={{ span: 10, offset: 1 }}>
                             {
                                 formMsg ?
                                     (formStatus) ?
@@ -164,7 +169,7 @@ const RegisterForm = ({ setContainer, history }) => {
                                             <i className="fas fa-birthday-cake"></i>
                                         </InputGroup.Text>
                                     </InputGroup.Prepend>
-                                    <Field className="form-control" disabled={isSubmitting} type="date" name="register.dob" placeholder="Enter DOB..." min="1950-01-01" max="2005-12-31" />
+                                    <Field className="form-control" disabled={isSubmitting} type="text" onFocus={(e) => e.target.type = 'date'} name="register.dob" placeholder="Enter DOB..." min="1950-01-01" max="2005-12-31" />
                                 </InputGroup>
                             </FormGroup>
                         </Col>

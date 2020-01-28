@@ -11,7 +11,7 @@ import * as Yup from 'yup'
 import axios from 'axios'
 import { withRouter } from 'react-router'
 
-const RegisterForm = ({ setContainer, history }) => {
+const RegisterForm = ({ setContainer, history, authenticate }) => {
     const [formStatus, setFormStatus] = useState(),
         [formMsg, setFormMsg] = useState(),
         [email, setEmail] = useState()
@@ -73,12 +73,14 @@ const RegisterForm = ({ setContainer, history }) => {
 
             onSubmit={
                 async ({ register: { email, password, passwordConf, phone, dob } }, { setSubmitting }) => {
-                    await axios.post('/users/register', { email, password, passwordConf, phone, dob }).then(({ data: { success, msg } }) => {
+                    await axios.post('/users/register', { email, password, passwordConf, phone, dob }).then(({ data: { success, msg, token } }) => {
                         setSubmitting(true) // Sets submitting to true so inputs can't be editted
 
                         if (success) {
                             setFormStatus(true)
                             setFormMsg(msg)
+
+                            authenticate(token, email) // Adds token and email to redux store for easy access
 
                             setTimeout(history.push('/setup/stepone'), 200) // Redirects to security question step
 

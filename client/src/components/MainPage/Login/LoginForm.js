@@ -11,7 +11,7 @@ import * as Yup from 'yup'
 import axios from 'axios'
 import { withRouter } from 'react-router'
 
-const LoginForm = ({ setContainer, history }) => {
+const LoginForm = ({ setContainer, history, authenticate }) => {
     const [formStatus, setFormStatus] = useState(),
         [formMsg, setFormMsg] = useState()
 
@@ -36,11 +36,13 @@ const LoginForm = ({ setContainer, history }) => {
             onSubmit={
                 async ({ login: { email, password } }, { setSubmitting }) => {
                     setSubmitting(true) // Sets submitting to true so inputs can't be editted
-                    await axios.post('/users/login', { email, password }).then(({ data: { success } }) => {
+                    await axios.post('/users/login', { email, password }).then(({ data: { success, token } }) => {
                         if (success) {
                             setFormStatus(true)
                             setFormMsg("Logged in successfully")
                             setSubmitting(false) // Sets submitting to true so inputs can be editted
+
+                            authenticate(token, email) // Adds token and email to redux store for easy access
 
                             setTimeout(history.push('/dashboard'), 200)
 

@@ -19,6 +19,15 @@
         animation: show 500ms forwards ease-in;
     }
 
+    .form-success {
+        background: green;
+        font-family: "Dosis", sans-serif;
+        color: white;
+        border: none;
+        padding: 5px;
+        animation: show 500ms forwards ease-in;
+    }
+
     .home-inputs {
         border-bottom: 2px solid orange;
         transition: border 500ms;

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -8,13 +8,29 @@ import FormGroup from 'react-bootstrap/FormGroup'
 import Alert from 'react-bootstrap/Alert'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
+import axios from 'axios'
+import { withRouter } from 'react-router'
 
-const RegisterForm = ({ setContainer }) => {
+const RegisterForm = ({ setContainer, history }) => {
+    const [formStatus, setFormStatus] = useState(),
+        [formMsg, setFormMsg] = useState()
+
     const RegisterSchema = Yup.object().shape({
         register: Yup.object().shape({
             email: Yup.string().trim()
                 .required('Email is required')
-                .email("Email must be valid"),
+                .email("Email must be valid")
+                .test('email-exists', "Email is already registered", async (email) => {
+                    return await axios.get('/users/verifyemail', { params: { email } }).then(res => {
+                        const { found } = res.data
+
+                        if (found) {
+                            return false // Email found
+                        }
+
+                        return true // Email not found
+                    })
+                }),
             password: Yup.string()
                 .required('Password is required')
                 .min(6, 'Password must be longer than 6 characters')
@@ -51,10 +67,27 @@ const RegisterForm = ({ setContainer }) => {
             validationSchema={RegisterSchema}
 
             onSubmit={
-                async ({ register }, { setSubmitting }) => {
-                    console.log(register)
+                async ({ register: { email, password, passwordConf, phone, dob } }, { setSubmitting }) => {
+                    await axios.post('/users/register', { email, password, passwordConf, phone, dob }).then(({ data: { success, msg } }) => {
+                        setSubmitting(true) // Sets submitting to true so inputs can't be editted
 
-                    setSubmitting(false)
+                        if (success) {
+                            setFormStatus(true)
+                            setFormMsg(msg)
+
+                            setTimeout(history.push('/setup/stepone'), 200) // Redirects to security question step
+
+                            return true
+                        }
+
+                        setFormStatus(false)
+                        setFormMsg(msg)
+                        setSubmitting(false) // Sets submitting to false so inputs can be editted
+
+                        return false
+                    })
+
+                    setSubmitting(false) // Sets submitting to false so inputs can be editted
                 }
             }
         >
@@ -63,6 +96,14 @@ const RegisterForm = ({ setContainer }) => {
                 <Form>
                     <Row>
                         <Col xs="12" md={{ span: 10, offset: 1 }}>
+                            {
+                                formMsg ?
+                                    (formStatus) ?
+                                        (<Alert className="mb-2 form-success text-center">{formMsg}</Alert>) :
+                                        (<Alert className="mb-2 form-error text-center">{formMsg}</Alert>)
+                                    : null
+                            }
+
                             <FormGroup>
                                 <ErrorMessage name="register.email">{msg => <Alert className="mb-1 form-error text-center" variant="danger">{msg}</Alert>}</ErrorMessage>
 
@@ -70,7 +111,7 @@ const RegisterForm = ({ setContainer }) => {
                                     <InputGroup.Prepend>
                                         <InputGroup.Text><i className="fas fa-at"></i></InputGroup.Text>
                                     </InputGroup.Prepend>
-                                    <Field className="form-control" type="email" name="register.email" placeholder="Enter email..." />
+                                    <Field className="form-control" disabled={isSubmitting} type="email" name="register.email" placeholder="Enter email..." />
                                 </InputGroup>
                             </FormGroup>
 
@@ -84,7 +125,7 @@ const RegisterForm = ({ setContainer }) => {
                                             <i className="fas fa-key"></i>
                                         </InputGroup.Text>
                                     </InputGroup.Prepend>
-                                    <Field className="form-control" type="password" name="register.password" placeholder="Enter password..." />
+                                    <Field className="form-control" disabled={isSubmitting} type="password" name="register.password" placeholder="Enter password..." />
                                 </InputGroup>
                             </FormGroup>
 
@@ -97,7 +138,7 @@ const RegisterForm = ({ setContainer }) => {
                                             <i className="fas fa-shield-alt"></i>
                                         </InputGroup.Text>
                                     </InputGroup.Prepend>
-                                    <Field className="form-control" type="password" name="register.passwordConf" placeholder="Re-enter password..." />
+                                    <Field className="form-control" disabled={isSubmitting} type="password" name="register.passwordConf" placeholder="Re-enter password..." />
                                 </InputGroup>
                             </FormGroup>
 
@@ -110,7 +151,7 @@ const RegisterForm = ({ setContainer }) => {
                                             <i className="fas fa-phone"></i>
                                         </InputGroup.Text>
                                     </InputGroup.Prepend>
-                                    <Field className="form-control" type="tel" name="register.phone" placeholder="Enter phone number..." />
+                                    <Field className="form-control" disabled={isSubmitting} type="tel" name="register.phone" placeholder="Enter phone number..." />
                                 </InputGroup>
                             </FormGroup>
 
@@ -123,7 +164,7 @@ const RegisterForm = ({ setContainer }) => {
                                             <i className="fas fa-birthday-cake"></i>
                                         </InputGroup.Text>
                                     </InputGroup.Prepend>
-                                    <Field className="form-control" type="date" name="register.dob" placeholder="Enter DOB..." min="1950-01-01" max="2005-12-31" />
+                                    <Field className="form-control" disabled={isSubmitting} type="date" name="register.dob" placeholder="Enter DOB..." min="1950-01-01" max="2005-12-31" />
                                 </InputGroup>
                             </FormGroup>
                         </Col>
@@ -131,14 +172,15 @@ const RegisterForm = ({ setContainer }) => {
 
                     <FormGroup className="m-0">
                         <ButtonGroup className="register-buttons home-buttons">
-                            <Button onClick={() => { setContainer(0); resetForm() }}><i className="fas fa-arrow-left"></i> &nbsp; BACK</Button>
+                            <Button disabled={isSubmitting} onClick={() => { setContainer(0); resetForm() }}><i className="fas fa-arrow-left"></i> &nbsp; BACK</Button>
                             <Button type="submit" disabled={isSubmitting}>SUBMIT</Button>
                         </ButtonGroup>
                     </FormGroup>
                 </Form>
-            )}
-        </Formik>
+            )
+            }
+        </Formik >
     )
 }
 
-export default RegisterForm
+export default withRouter(RegisterForm)

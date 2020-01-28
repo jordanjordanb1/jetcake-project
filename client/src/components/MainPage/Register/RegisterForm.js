@@ -172,7 +172,7 @@ const RegisterForm = ({ setContainer, history }) => {
 
                     <FormGroup className="m-0">
                         <ButtonGroup className="register-buttons home-buttons">
-                            <Button disabled={isSubmitting} onClick={() => { setContainer(0); resetForm() }}><i className="fas fa-arrow-left"></i> &nbsp; BACK</Button>
+                            <Button disabled={isSubmitting} onClick={() => { setContainer(0); resetForm(); setFormMsg(); setFormStatus() }}><i className="fas fa-arrow-left"></i> &nbsp; BACK</Button>
                             <Button type="submit" disabled={isSubmitting}>SUBMIT</Button>
                         </ButtonGroup>
                     </FormGroup>

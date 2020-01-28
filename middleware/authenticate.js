@@ -10,15 +10,15 @@ exports.getToken = _id => {
 }
 
 exports.verifyUser = (req, res, next) => {
-    passport.authenticate('local', (err, user, info) => { // Verifies if the username and password is correct
+    passport.authenticate('local', (err, user, info) => { // Verifies if the email and password is correct
         if (err) {
             next(err)
             return res.send({ success: false, message: "An unknown error occured" })
         }
 
-        // No user was found so either username or password was incorrect
+        // No user was found so either email or password was incorrect
         if (!user)
-            return res.send({ success: false, message: "Username or password is incorrect" });
+            return res.send({ success: false, message: "Email or password is incorrect" });
 
         // User was found, so login passport
         req.logIn(user, { session: false }, err => {

@@ -54,6 +54,12 @@ usersRouter.get('/verifyemail', async (req, res, next) => {
     })
 })
 
+// Checks if JWT Token is valid
+usersRouter.get('/verifytoken', auth.verifyAccess(), (req, res, next) => {
+    res.json({ access: true })
+})
+
+// User login route
 usersRouter.post('/login', (req, res, next) => {
     try {
         auth.verifyUser(req, res, next) // Verifies if user exists
@@ -61,5 +67,7 @@ usersRouter.post('/login', (req, res, next) => {
         next(e)
     }
 })
+
+
 
 module.exports = usersRouter

@@ -7,8 +7,8 @@ import { PersistGate } from 'redux-persist/integration/react'
 import Main from './components/MainPage/Main';
 import AuthGuard from './components/AuthGuard/AuthGuard';
 
-const Login = React.lazy(
-    () => import('./components/Login/Login')
+const PostLogin = React.lazy(
+    () => import('./components/PostLogin/PostLogin')
 )
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
 
                         <AuthGuard to="/login">
                             <Suspense fallback={<div>Loading...</div>}>
-                                <Login />
+                                <PostLogin />
                             </Suspense>
                         </AuthGuard>
                     </Switch>

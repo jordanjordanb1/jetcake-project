@@ -2,7 +2,6 @@ import React, { PureComponent, Suspense } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router'
 import { checkUser } from '../../redux/ActionCreators'
-import Address from './Address/Address'
 import './PostLogin.scss'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -22,6 +21,10 @@ class PostLogin extends PureComponent {
             () => import('./SecurityQuestions/SecurityQuestions')
         )
 
+        const Address = React.lazy(
+            () => import('./Address/Address')
+        )
+
         return (
             <Container>
                 <Row className="mt-xs-2 mt-4">
@@ -34,7 +37,11 @@ class PostLogin extends PureComponent {
                                     </Suspense>
                                 )
                             } else if (hasSecurity && !hasAddress) {
-                                return <Address token={token} />
+                                return (
+                                    <Suspense fallback={<div>Loading...</div>}>
+                                        <Address token={token} />
+                                    </Suspense>
+                                )
                             } else {
                                 return <Redirect to='/dashboard' />
                             }

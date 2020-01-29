@@ -55,8 +55,47 @@ usersRouter.get('/verifyemail', async (req, res, next) => {
 })
 
 // Checks if JWT Token is valid
-usersRouter.get('/verifytoken', auth.verifyAccess(), (req, res, next) => {
+usersRouter.get('/verifytoken', auth.verifyAccess, (req, res, next) => {
     res.json({ access: true })
+})
+
+// Checks if user has everything setup
+usersRouter.get('/check', auth.verifyAccess, (req, res, next) => {
+    const { email } = req.query
+
+    User.findOne({ email }, (err, { security_questions, address }) => {
+        // Unknown error, or DB is down
+        if (err) {
+            return res.json({ success: false, msg: "An unknown error occured!" })
+        }
+
+        if (security_questions.length === 0) {
+            res.json({ security_questions: false, address: false })
+        } else if (!address) {
+            res.json({ security_questions: true, address: false })
+        } else {
+            res.json({ security_questions: true, address: true })
+        }
+    })
+})
+
+// Updates user account
+usersRouter.put('/:_id', auth.verifyAccess, (req, res, next) => {
+    const body = req.body,
+        { _id } = req.params
+
+    User.findByIdAndUpdate({ _id }, { ...body }, (err, user) => {
+        if (err) {
+            res.json({ err, success: false })
+        }
+
+        if (user) {
+            res.json({ success: true })
+        } else {
+            res.json({ success: false })
+        }
+
+    })
 })
 
 // User login route

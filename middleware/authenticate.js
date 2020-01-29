@@ -32,6 +32,4 @@ exports.verifyUser = (req, res, next) => {
     })(req, res, next)
 }
 
-exports.verifyAccess = () => {
-    return passport.authenticate('jwt', { session: false }) // Checks if a jwt token is in auth header and valid
-}
+exports.verifyAccess = passport.authenticate('jwt', { session: false }) // Checks if a jwt token is in auth header and valid

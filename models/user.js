@@ -19,10 +19,7 @@ const userSchema = new Schema({
         type: String,
         match: /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/
     },
-    security_questions: {
-        required: false,
-        type: Array
-    },
+    security_questions: [],
     address: {
         required: false,
         type: String

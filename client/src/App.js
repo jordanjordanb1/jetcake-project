@@ -11,6 +11,10 @@ const PostLogin = React.lazy(
     () => import('./components/PostLogin/PostLogin')
 )
 
+const Dashboard = React.lazy(
+    () => import('./components/Dashboard/Dashboard')
+)
+
 function App() {
     return (
         <Provider store={store}>
@@ -24,6 +28,12 @@ function App() {
                         <AuthGuard to="/login">
                             <Suspense fallback={<div>Loading...</div>}>
                                 <PostLogin />
+                            </Suspense>
+                        </AuthGuard>
+
+                        <AuthGuard to="/dashboard">
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <Dashboard />
                             </Suspense>
                         </AuthGuard>
                     </Switch>

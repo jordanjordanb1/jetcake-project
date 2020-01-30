@@ -8,11 +8,7 @@ const AuthGuard = ({ children, isAuthenticated, token, email, hasAddress, hasSec
             {...rest}
             render={() => {
                 if (isAuthenticated && token && email) {
-                    if (hasSecurity || hasAddress) {
-                        return children
-                    }
-
-                    return <Redirect to="/login" />
+                    return children
                 } else {
                     return <Redirect to="/" />
                 }

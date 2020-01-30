@@ -68,7 +68,7 @@ const AddressForm = ({ token, history }) => {
                         if (success) {
                             setFormStatus(true)
                             setFormMsg("Address updated")
-                            setTimeout(history.push('/login'), 500)
+                            setTimeout(history.push('/dashboard'), 500)
 
                             return true
                         }

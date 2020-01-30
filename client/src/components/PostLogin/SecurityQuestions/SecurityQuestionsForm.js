@@ -80,7 +80,7 @@ const SecurityQuestionsForm = ({ token, history }) => {
                         if (success) {
                             setFormStatus(true)
                             setFormMsg("Security questions updated")
-                            setTimeout(history.push('/login'), 500)
+                            setTimeout(history.push('/dashboard'), 500)
 
                             return true
                         }

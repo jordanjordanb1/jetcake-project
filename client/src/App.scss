@@ -1,3 +1,9 @@
+.input-group > .form-control {
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
 @keyframes show {
     0% {
         opacity: 0;

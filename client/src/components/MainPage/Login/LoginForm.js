@@ -9,11 +9,12 @@ import Alert from 'react-bootstrap/Alert'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
-import { withRouter } from 'react-router'
+import { useHistory } from 'react-router-dom'
 
-const LoginForm = ({ setContainer, history, authenticate }) => {
+export default function LoginForm({ setContainer, authenticate, checkUser }) {
     const [formStatus, setFormStatus] = useState(),
-        [formMsg, setFormMsg] = useState()
+        [formMsg, setFormMsg] = useState(),
+        history = useHistory()
 
     const LoginSchema = Yup.object().shape({
         login: Yup.object().shape({
@@ -36,15 +37,29 @@ const LoginForm = ({ setContainer, history, authenticate }) => {
             onSubmit={
                 async ({ login: { email, password } }, { setSubmitting }) => {
                     setSubmitting(true) // Sets submitting to true so inputs can't be editted
-                    await axios.post('/users/login', { email, password }).then(({ data: { success, token } }) => {
+                    await axios.post('/users/login', { email, password }).then(({ data: { success, token, user } }) => {
                         if (success) {
+                            let { security_questions, address, profileImg } = user || ''
+
+                            if (Array.isArray(security_questions) && security_questions.length)
+                                security_questions = true
+                            else
+                                security_questions = false
+
+                            address ? address = true : address = false
+                            profileImg ? profileImg = true : profileImg = false
+
                             setFormStatus(true)
                             setFormMsg("Logged in successfully")
                             setSubmitting(false) // Sets submitting to true so inputs can be editted
 
-                            authenticate(token, email) // Adds token and email to redux store for easy access
+                            authenticate(token, email, security_questions, address, profileImg) // Adds token and email to redux store for easy access
 
-                            setTimeout(history.push('/login'), 200)
+                            if (!security_questions || !address || !profileImg) {
+                                setTimeout(() => history.push('/login'), 500)
+                            } else {
+                                setTimeout(() => history.push('/dashboard'), 500)
+                            }
 
                             return true
                         }
@@ -108,5 +123,3 @@ const LoginForm = ({ setContainer, history, authenticate }) => {
         </Formik >
     )
 }
-
-export default withRouter(LoginForm)

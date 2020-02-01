@@ -3,8 +3,12 @@ import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import Container from 'react-bootstrap/Container'
 import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { logOut } from '../../redux/ActionCreators'
 
 export default function NavbarComponent() {
+    const dispatch = useDispatch()
+
     return (
         <>
             <Navbar bg="light">
@@ -15,7 +19,7 @@ export default function NavbarComponent() {
                     </Nav>
 
                     <Nav className="ml-auto">
-                        <Link className="nav-link" to="/logout"><i className="fas fa-sign-out-alt"></i> Logout</Link>
+                        <Link className="nav-link" onClick={() => dispatch(logOut())} to="/"><i className="fas fa-sign-out-alt"></i> Logout</Link>
                     </Nav>
                 </Container>
             </Navbar>

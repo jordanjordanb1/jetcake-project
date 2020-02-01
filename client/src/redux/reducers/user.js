@@ -17,6 +17,8 @@ export const user = (state = {
             return { ...state, hasAddress: action.payload }
         case ActionTypes.SET_HAS_PROFILE_PIC:
             return { ...state, hasProfilePic: action.payload }
+        case ActionTypes.LOG_OUT:
+            return { ...state, isAuthenticated: false, token: null, email: null, hasAddress: null, hasSecurity: null, hasProfilePic: null }
         default:
             return state;
     }

@@ -49,3 +49,15 @@ export const authenticate = (token, email, security_questions, address, profileI
         dispatch(setHasProfilePic(true))
     }
 }
+
+export const logOut = () => (dispatch, getState) => {
+    const { token } = getState().user
+
+    console.log('logging out')
+
+    axios.get('/users/logout', { headers: { 'Authorization': `Bearer ${token}` } }).then(res => {
+        dispatch({
+            type: ActionTypes.LOG_OUT
+        })
+    })
+}

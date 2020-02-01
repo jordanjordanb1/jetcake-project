@@ -5,7 +5,8 @@ export const user = (state = {
     token: null,
     email: null,
     hasAddress: null,
-    hasSecurity: null
+    hasSecurity: null,
+    hasProfilePic: null
 }, action) => {
     switch (action.type) {
         case ActionTypes.AUTHENTICATE_USER:
@@ -14,6 +15,8 @@ export const user = (state = {
             return { ...state, hasSecurity: action.payload }
         case ActionTypes.SET_HAS_ADDRESS:
             return { ...state, hasAddress: action.payload }
+        case ActionTypes.SET_HAS_PROFILE_PIC:
+            return { ...state, hasProfilePic: action.payload }
         default:
             return state;
     }

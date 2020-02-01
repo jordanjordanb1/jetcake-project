@@ -8,7 +8,7 @@ import Register from './Register/Register'
 import { connect } from 'react-redux'
 import { authenticate } from '../../redux/ActionCreators'
 
-const Main = ({ authenticate }) => {
+const Main = ({ authenticate, }) => {
     const [container, setContainer] = useState(2) // 0 for login container, 1 for register container TODO: Change to more understable way
 
     return (
@@ -24,7 +24,7 @@ const Main = ({ authenticate }) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    authenticate: (token, email) => dispatch(authenticate(token, email))
+    authenticate: (token, email, security_questions, address, profileImg) => dispatch(authenticate(token, email, security_questions, address, profileImg))
 })
 
 export default connect(null, mapDispatchToProps)(Main)

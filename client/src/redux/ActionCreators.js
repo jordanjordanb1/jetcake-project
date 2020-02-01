@@ -4,14 +4,6 @@ import { config } from '../config'
 
 axios.defaults.baseURL = config.url // Sets base URL in axios
 
-export const authenticate = (token, email) => ({
-    type: ActionTypes.AUTHENTICATE_USER,
-    payload: {
-        token,
-        email,
-    }
-})
-
 export const setHasSecurity = boolean => ({
     type: ActionTypes.SET_HAS_SECURITY,
     payload: boolean
@@ -22,23 +14,38 @@ export const setHasAddress = boolean => ({
     payload: boolean
 })
 
-export const checkUser = (token, email) => (dispatch, getState) => {
-    const { hasSecurity, hasAddress } = getState().user
+export const setHasProfilePic = boolean => ({
+    type: ActionTypes.SET_HAS_PROFILE_PIC,
+    payload: boolean
+})
 
-    if (!hasSecurity && !hasAddress) {
-        axios.get('/users/check', { params: { email }, headers: { 'Authorization': `Bearer ${token}` } }).then(({ data: { security_questions, address } }) => {
-            if (!security_questions) {
-                dispatch(setHasSecurity(false))
-                dispatch(setHasAddress(false))
-            } else if (!address) {
-                dispatch(setHasSecurity(true))
-                dispatch(setHasAddress(false))
-            } else {
-                dispatch(setHasSecurity(true))
-                dispatch(setHasAddress(true))
-            }
-        })
+export const authenticate = (token, email, security_questions, address, profileImg) => dispatch => {
+    dispatch({
+        type: ActionTypes.AUTHENTICATE_USER,
+        payload: {
+            token,
+            email,
+        }
+    })
+
+    // Checks if user has set security questions
+    if (!security_questions) {
+        dispatch(setHasSecurity(false))
+    } else {
+        dispatch(setHasSecurity(true))
     }
 
-    return true
+    // Checks if user has set an address
+    if (!address) {
+        dispatch(setHasAddress(false))
+    } else {
+        dispatch(setHasAddress(true))
+    }
+
+    // Checks if user has a profile image
+    if (!profileImg) {
+        dispatch(setHasProfilePic(false))
+    } else {
+        dispatch(setHasProfilePic(true))
+    }
 }

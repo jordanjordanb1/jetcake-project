@@ -121,20 +121,4 @@ usersRouter.post('/profilepicture/:_id', auth.verifyAccess, (req, res, next) => 
     })
 })
 
-usersRouter.get('/profilepicture/:_id', (req, res, next) => {
-    const { _id } = req.params
-
-    User.findOne({ _id }, (err, { profileImg }) => {
-        err ? (res.json({ success: false, msg: "An unknown error occured!" })) : null
-
-        const img = fs.createReadStream(`./public/images/profileimage/${profileImg}`),
-            fileType = profileImg.split('.')[1]
-
-        img.on('open', () => {
-            res.type(fileType)
-            img.pipe(res)
-        })
-    })
-})
-
 module.exports = usersRouter

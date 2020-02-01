@@ -43,7 +43,9 @@ export default function ProfilePictureForm({ token }) {
                     payload: true
                 })
 
-                return history.push('/dashboard')
+                return setTimeout(() => {
+                    history.push('/dashboard')
+                })
             }
 
             setFormStatus(false)

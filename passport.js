@@ -14,10 +14,8 @@ const JwtStrategy = new JWTStrategy(opt, (payload, done) => {
         console.log(payload)
         User.findById({ _id: payload._id }).then(user => {
             if (user) {
-                console.log('user found in db of passport')
                 done(null, user)
             } else {
-                console.log('user not found in db of passport')
                 done(null, false)
             }
         })

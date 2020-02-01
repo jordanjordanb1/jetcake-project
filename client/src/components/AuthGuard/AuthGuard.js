@@ -1,14 +1,24 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router'
-import { connect } from 'react-redux'
+import { useLocation } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
-const AuthGuard = ({ children, isAuthenticated, token, email, hasAddress, hasSecurity, ...rest }) => {
+export default function AuthGuard({ children, ...rest }) {
+    const { isAuthenticated, token, email, hasSecurity, hasAddress, hasProfilePic } = useSelector(state => state.user),
+        location = useLocation()
+
     return (
         <Route
             {...rest}
             render={() => {
                 if (isAuthenticated && token && email) {
-                    return children
+                    if (!hasSecurity || !hasAddress || !hasProfilePic) {
+                        if (location.pathname !== '/setup') {
+                            return <Redirect to="/setup" />
+                        } else { return children }
+                    } else {
+                        return children
+                    }
                 } else {
                     return <Redirect to="/" />
                 }
@@ -16,13 +26,3 @@ const AuthGuard = ({ children, isAuthenticated, token, email, hasAddress, hasSec
         />
     )
 }
-
-const mapStateToProps = state => ({
-    isAuthenticated: state.user.isAuthenticated,
-    token: state.user.token,
-    email: state.user.email,
-    hasAddress: state.user.hasAddress,
-    hasSecurity: state.user.hasSecurity
-})
-
-export default connect(mapStateToProps)(AuthGuard)

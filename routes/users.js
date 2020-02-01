@@ -121,4 +121,10 @@ usersRouter.post('/profilepicture/:_id', auth.verifyAccess, (req, res, next) => 
     })
 })
 
+// Logs user out
+usersRouter.get('/logout', auth.verifyAccess, (req, res, next) => {
+    req.logOut() // Logs user out
+    res.end() // Ends request
+})
+
 module.exports = usersRouter

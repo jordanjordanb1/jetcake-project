@@ -21,13 +21,16 @@ exports.verifyUser = (req, res, next) => {
             return res.send({ success: false, message: "Email or password is incorrect" });
 
         // User was found, so login passport
-        req.logIn(user, { session: false }, err => {
+        req.login(user, { session: false }, (err) => {
             err ? next(err) : null // Unknown error occurred
 
-            const token = this.getToken(user._id) // Gets a new jwt token
+            const token = this.getToken(user._id),
+                security_questions = user.security_questions || '',
+                address = user.address || '',
+                profileImg = user.profileImg || ''
 
             res.status(200).setHeader('Authorization', `Bearer ${token}`) // Sets auth header with token
-            return res.send({ success: true, token })
+            return res.send({ success: true, token, user: { security_questions, address, profileImg } })
         })
     })(req, res, next)
 }

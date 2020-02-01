@@ -2,7 +2,8 @@ const express = require('express'),
     usersRouter = express.Router(),
     passport = require('passport'),
     auth = require('../middleware/authenticate'),
-    User = require('../models/user')
+    User = require('../models/user'),
+    fs = require('fs')
 
 
 // User registration route
@@ -36,8 +37,8 @@ usersRouter.post('/register', async (req, res, next) => {
 })
 
 // Checks if email exists in registration form
-usersRouter.get('/verifyemail', async (req, res, next) => {
-    const { email } = req.query
+usersRouter.get('/email/:email/verify', async (req, res, next) => {
+    const { email } = req.params
 
     // Looks in DB to see if email is already registered
     await User.findOne({ email }, (err, user) => {
@@ -57,26 +58,6 @@ usersRouter.get('/verifyemail', async (req, res, next) => {
 // Checks if JWT Token is valid
 usersRouter.get('/verifytoken', auth.verifyAccess, (req, res, next) => {
     res.json({ access: true })
-})
-
-// Checks if user has everything setup
-usersRouter.get('/check', auth.verifyAccess, (req, res, next) => {
-    const { email } = req.query
-
-    User.findOne({ email }, (err, { security_questions, address }) => {
-        // Unknown error, or DB is down
-        if (err) {
-            return res.json({ success: false, msg: "An unknown error occured!" })
-        }
-
-        if (security_questions.length === 0) {
-            res.json({ security_questions: false, address: false })
-        } else if (!address) {
-            res.json({ security_questions: true, address: false })
-        } else {
-            res.json({ security_questions: true, address: true })
-        }
-    })
 })
 
 // Updates user account
@@ -110,6 +91,8 @@ usersRouter.put('/:_id', auth.verifyAccess, (req, res, next) => {
 
 // User login route
 usersRouter.post('/login', (req, res, next) => {
+    // Please see 'middlware/authentication.js'
+
     try {
         auth.verifyUser(req, res, next) // Verifies if user exists
     } catch (e) {
@@ -117,6 +100,20 @@ usersRouter.post('/login', (req, res, next) => {
     }
 })
 
+usersRouter.get('/profilepicture/:_id', (req, res, next) => {
+    const { _id } = req.params
 
+    User.findOne({ _id }, (err, { profileImg }) => {
+        err ? (res.json({ success: false, msg: "An unknown error occured!" })) : null
+
+        const img = fs.createReadStream(`./public/images/profileimage/${profileImg}`),
+            fileType = profileImg.split('.')[1]
+
+        img.on('open', () => {
+            res.type(fileType)
+            img.pipe(res)
+        })
+    })
+})
 
 module.exports = usersRouter

@@ -6,17 +6,20 @@ import { Link } from 'react-router-dom'
 
 export default function NavbarComponent() {
     return (
-        <Navbar bg="light">
-            <Container>
-                <Nav>
-                    <Link className="nav-link" to="/dashboard"><i className="fas fa-home"></i> Home</Link>
-                    <Link className="nav-link" to="/settings"><i className="fas fa-cog"></i> Settings</Link>
-                </Nav>
+        <>
+            <Navbar bg="light">
+                <Container>
+                    <Nav>
+                        <Link className="nav-link" to="/dashboard"><i className="fas fa-home"></i> Home</Link>
+                        <Link className="nav-link" to="/settings"><i className="fas fa-cog"></i> Settings</Link>
+                    </Nav>
 
-                <Nav className="ml-auto">
-                    <Link className="nav-link" to="/logout"><i className="fas fa-sign-out-alt"></i> Logout</Link>
-                </Nav>
-            </Container>
-        </Navbar>
+                    <Nav className="ml-auto">
+                        <Link className="nav-link" to="/logout"><i className="fas fa-sign-out-alt"></i> Logout</Link>
+                    </Nav>
+                </Container>
+            </Navbar>
+            <br />
+        </>
     )
 }

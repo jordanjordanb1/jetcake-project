@@ -18,10 +18,10 @@ mongoose.set('useCreateIndex', true);
 // Connecting to server
 if (process.env.PROD) {
   console.log("Trying to connect to production DB...")
-  mongoose.connect(__CONFIG__.mongoProdUrl, { useNewUrlParser: true, useUnifiedTopology: true }).then(db => console.log('Connected to MongoDB...')).catch(err => console.error(err))
+  mongoose.connect(__CONFIG__.mongoProdUrl, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }).then(db => console.log('Connected to MongoDB...')).catch(err => console.error(err))
 } else {
   console.log("Trying to connect to development DB...")
-  mongoose.connect(__CONFIG__.mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true }).then(db => console.log('Connected to MongoDB...')).catch(err => console.error(err))
+  mongoose.connect(__CONFIG__.mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }).then(db => console.log('Connected to MongoDB...')).catch(err => console.error(err))
 }
 
 // Helmet setup

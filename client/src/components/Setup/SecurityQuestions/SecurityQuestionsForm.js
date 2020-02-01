@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -8,14 +9,14 @@ import Alert from 'react-bootstrap/Alert'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
-import { withRouter } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import jwt_decode from 'jwt-decode'
 
-
-
-const SecurityQuestionsForm = ({ token, history }) => {
+export default function SecurityQuestionsForm({ token }) {
     const [formStatus, setFormStatus] = useState(),
-        [formMsg, setFormMsg] = useState()
+        [formMsg, setFormMsg] = useState(),
+        history = useHistory(),
+        dispatch = useDispatch()
 
     const SecurityQuestionsSchema = Yup.object({
         questions: Yup.object({
@@ -69,20 +70,23 @@ const SecurityQuestionsForm = ({ token, history }) => {
             validationSchema={SecurityQuestionsSchema}
 
             onSubmit={
-                async ({ questions }, { setSubmitting }) => {
+                ({ questions }, { setSubmitting }) => {
                     const { _id } = jwt_decode(token)
 
                     setSubmitting(true)
 
-                    await axios.put(`/users/${_id}`, { 'security_questions': [questions.one, questions.two, questions.three] }, { headers: { 'Authorization': `Bearer ${token}` } }).then(({ data: { success } }) => {
-                        console.log(success)
-
+                    axios.put(`/users/${_id}`, { 'security_questions': [questions.one, questions.two, questions.three] }, { headers: { 'Authorization': `Bearer ${token}` } }).then(({ data: { success } }) => {
                         if (success) {
                             setFormStatus(true)
                             setFormMsg("Security questions updated")
-                            setTimeout(history.push('/dashboard'), 500)
 
-                            return true
+                            // Sets user in store to have security questions filled out so next stepp will appear
+                            dispatch({
+                                type: 'SET_HAS_SECURITY',
+                                payload: true
+                            })
+
+                            return history.push('/dashboard')
                         }
 
 
@@ -209,5 +213,3 @@ const SecurityQuestionsForm = ({ token, history }) => {
         </Formik >
     )
 }
-
-export default withRouter(SecurityQuestionsForm)

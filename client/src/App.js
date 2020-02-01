@@ -7,15 +7,15 @@ import { PersistGate } from 'redux-persist/integration/react'
 import Main from './components/MainPage/Main';
 import AuthGuard from './components/AuthGuard/AuthGuard';
 
-const PostLogin = React.lazy(
-    () => import('./components/PostLogin/PostLogin')
+const Setup = React.lazy(
+    () => import('./components/Setup/Setup')
 )
 
 const Dashboard = React.lazy(
     () => import('./components/Dashboard/Dashboard')
 )
 
-function App() {
+export default function App() {
     return (
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
@@ -25,15 +25,16 @@ function App() {
                             <Main />
                         </Route>
 
-                        <AuthGuard to="/login">
+                        <AuthGuard path="/dashboard">
                             <Suspense fallback={<div>Loading...</div>}>
-                                <PostLogin />
+                                <Dashboard />
                             </Suspense>
                         </AuthGuard>
 
-                        <AuthGuard to="/dashboard">
+
+                        <AuthGuard to="/setup">
                             <Suspense fallback={<div>Loading...</div>}>
-                                <Dashboard />
+                                <Setup />
                             </Suspense>
                         </AuthGuard>
                     </Switch>
@@ -42,5 +43,3 @@ function App() {
         </Provider>
     );
 }
-
-export default App;

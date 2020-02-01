@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -8,12 +9,14 @@ import Alert from 'react-bootstrap/Alert'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
-import { withRouter } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import jwt_decode from 'jwt-decode'
 
-const AddressForm = ({ token, history }) => {
+export default function AddressForm({ token }) {
     const [formStatus, setFormStatus] = useState(),
         [formMsg, setFormMsg] = useState(),
+        history = useHistory(),
+        dispatch = useDispatch(),
         USStates = [
             'AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FM', 'FL', 'GA',
             'GU', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MH', 'MD', 'MA',
@@ -59,18 +62,23 @@ const AddressForm = ({ token, history }) => {
             validationSchema={AddressSchema}
 
             onSubmit={
-                async ({ address: { street, city, state, zip } }, { setSubmitting }) => {
+                ({ address: { street, city, state, zip } }, { setSubmitting }) => {
                     const { _id } = jwt_decode(token)
 
                     setSubmitting(true)
 
-                    await axios.put(`/users/${_id}`, { address: `${street}|${city}|${state}|${zip}` }, { headers: { 'Authorization': `Bearer ${token}` } }).then(({ data: { success } }) => {
+                    axios.put(`/users/${_id}`, { address: `${street}|${city}|${state}|${zip}` }, { headers: { 'Authorization': `Bearer ${token}` } }).then(({ data: { success } }) => {
                         if (success) {
                             setFormStatus(true)
                             setFormMsg("Address updated")
-                            setTimeout(history.push('/dashboard'), 500)
 
-                            return true
+                            // Sets user in store to have security questions filled out so next stepp will appear
+                            dispatch({
+                                type: 'SET_HAS_ADDRESS',
+                                payload: true
+                            })
+
+                            return history.replace('/dashboard')
                         }
 
 
@@ -159,5 +167,3 @@ const AddressForm = ({ token, history }) => {
         </Formik >
     )
 }
-
-export default withRouter(AddressForm)

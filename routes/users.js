@@ -3,8 +3,8 @@ const express = require('express'),
     passport = require('passport'),
     auth = require('../middleware/authenticate'),
     User = require('../models/user'),
-    fs = require('fs')
-
+    fs = require('fs'),
+    Jimp = require('../jimp')
 
 // User registration route
 usersRouter.post('/register', async (req, res, next) => {
@@ -98,6 +98,27 @@ usersRouter.post('/login', (req, res, next) => {
     } catch (e) {
         next(e)
     }
+})
+
+// Uploads a new image for user
+usersRouter.post('/profilepicture/:_id', auth.verifyAccess, (req, res, next) => {
+    const { _id } = req.params,
+        { image } = req.body,
+        base64Image = image.split(';base64,').pop()
+
+    fs.writeFile(`./public/images/profileimage/${_id}.png`, base64Image, { encoding: 'base64' }, err => {
+        if (err)
+            res.json({ success: false })
+    })
+
+    Jimp([`./public/images/profileimage/${_id}.png`], 500, undefined, 80)
+
+    User.findByIdAndUpdate({ _id }, { profileImg: `${_id}.png` }, (err, user) => {
+        if (err)
+            res.json({ success: false })
+
+        res.json({ success: true })
+    })
 })
 
 usersRouter.get('/profilepicture/:_id', (req, res, next) => {

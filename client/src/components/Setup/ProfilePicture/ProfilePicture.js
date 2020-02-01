@@ -1,6 +1,7 @@
 import React from 'react'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import ProfilePictureForm from './ProfilePictureForm'
 
 export default function ProfilePicture({ token }) {
     return (
@@ -14,6 +15,7 @@ export default function ProfilePicture({ token }) {
 
             <Row>
                 <Col xs="12">
+                    <ProfilePictureForm token={token} />
                 </Col>
             </Row>
         </div>

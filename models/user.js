@@ -23,6 +23,10 @@ const userSchema = new Schema({
     address: {
         required: false,
         type: String
+    },
+    profileImg: {
+        required: false,
+        type: String
     }
 }, { timestamps: true })
 

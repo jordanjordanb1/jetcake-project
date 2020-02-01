@@ -9,12 +9,13 @@ import Alert from 'react-bootstrap/Alert'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
-import { withRouter } from 'react-router'
+import { useHistory } from 'react-router-dom'
 
-const RegisterForm = ({ setContainer, history, authenticate }) => {
+export default function RegisterForm({ setContainer, authenticate }) {
     const [formStatus, setFormStatus] = useState(),
         [formMsg, setFormMsg] = useState(),
-        [email, setEmail] = useState()
+        [email, setEmail] = useState(),
+        history = useHistory()
 
     const RegisterSchema = Yup.object().shape({
         register: Yup.object().shape({
@@ -24,9 +25,9 @@ const RegisterForm = ({ setContainer, history, authenticate }) => {
                 .test('email-exists', "Email is already registered", async (typedEmail) => {
                     // Checks to see if new email was typed so server doesn't get spammed
                     if (typedEmail !== email) {
-                        return await axios.get('/users/verifyemail', { params: { email } }).then(res => {
+                        await axios.get(`/users/email/${typedEmail}/verify`).then(res => {
                             const { found } = res.data
-                            setEmail(email)
+                            setEmail(typedEmail)
 
                             if (found) {
                                 return false // Email found
@@ -82,7 +83,7 @@ const RegisterForm = ({ setContainer, history, authenticate }) => {
 
                             authenticate(token, email) // Adds token and email to redux store for easy access
 
-                            setTimeout(history.push('/login'), 200) // Redirects to security question step
+                            setTimeout(history.push('/setup'), 500) // Redirects to security question step
 
                             return true
                         }
@@ -189,5 +190,3 @@ const RegisterForm = ({ setContainer, history, authenticate }) => {
         </Formik >
     )
 }
-
-export default withRouter(RegisterForm)

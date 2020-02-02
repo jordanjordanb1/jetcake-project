@@ -1,5 +1,5 @@
 export const isProd = () => {
-    const isProd = false
+    const isProd = true
 
     return isProd
 }

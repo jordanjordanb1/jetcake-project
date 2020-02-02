@@ -29,7 +29,7 @@ app.use(helmet())
 
 // CORS setup
 if (process.env.PROD)
-  app.use(cors({ origin: 'FILL OUT LATER', credentials: true }))
+  app.use(cors({ origin: 'https://jetcakes-project.herokuapp.com/', credentials: true }))
 else
   app.use(cors({ origin: '*', credentials: true }));
 

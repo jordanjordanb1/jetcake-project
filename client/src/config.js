@@ -6,7 +6,7 @@ export const isProd = () => {
 
 const URL = () => {
     if (isProd()) {
-        return '' // Set in future
+        return 'https://jetcakes-project.herokuapp.com' // Set in future
     } else {
         return 'http://localhost:3001'
     }

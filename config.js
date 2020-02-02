@@ -5,6 +5,6 @@ const mongodb_user = process.env.MONGOUSER || '',
 
 module.exports = {
     mongoUrl: 'mongodb://localhost:27017/jetcake',
-    mongoProdUrl: `mongodb://${mongodb_user}:${mongodb_pass}@ds061757.mlab.com:61757/heroku_8f2wlb6c`, // TODO: Fix once uploaded
+    mongoProdUrl: 'mongodb://' + mongodb_user + ':' + mongodb_pass + '@ds033069.mlab.com:33069/heroku_87mmvh8d',
     secret
 }

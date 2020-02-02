@@ -15,6 +15,10 @@ const Dashboard = React.lazy(
     () => import('./components/Dashboard/Dashboard')
 )
 
+const Settings = React.lazy(
+    () => import('./components/Settings/Settings')
+)
+
 export default function App() {
     return (
         <Provider store={store}>
@@ -25,18 +29,24 @@ export default function App() {
                             <Main />
                         </Route>
 
-                        <AuthGuard path="/dashboard">
-                            <Suspense fallback={<div>Loading...</div>}>
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <AuthGuard to="/settings">
+                                <Settings />
+                            </AuthGuard>
+                        </Suspense>
+
+
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <AuthGuard path="/dashboard">
                                 <Dashboard />
-                            </Suspense>
-                        </AuthGuard>
+                            </AuthGuard>
+                        </Suspense>
 
-
-                        <AuthGuard to="/setup">
-                            <Suspense fallback={<div>Loading...</div>}>
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <AuthGuard to="/setup">
                                 <Setup />
-                            </Suspense>
-                        </AuthGuard>
+                            </AuthGuard>
+                        </Suspense>
                     </Switch>
                 </BrowserRouter>
             </PersistGate>

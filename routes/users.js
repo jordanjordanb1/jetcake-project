@@ -60,34 +60,53 @@ usersRouter.get('/verifytoken', auth.verifyAccess, (req, res, next) => {
     res.json({ access: true })
 })
 
-// Updates user account
-usersRouter.put('/:_id', auth.verifyAccess, (req, res, next) => {
-    const body = req.body,
-        { _id } = req.params
+// /user/:_id route
+usersRouter.route('/:_id') // Updates user account
+    .put(auth.verifyAccess, (req, res, next) => {
+        const body = req.body,
+            { _id } = req.params
 
-    if (
-        !body['email'] ||
-        !body['_id'] ||
-        !body['dob'] ||
-        !body['salt'] ||
-        !body['hash']
-    ) {
-        User.findByIdAndUpdate({ _id }, { ...body }, (err, user) => {
-            if (err) {
-                res.json({ err, success: false })
-            }
+        if (
+            !body['email'] ||
+            !body['_id'] ||
+            !body['dob'] ||
+            !body['salt'] ||
+            !body['hash']
+        ) {
+            User.findByIdAndUpdate({ _id }, { ...body }, (err, user) => {
+                if (err) {
+                    res.json({ err, success: false })
+                }
+
+                if (user) {
+                    res.json({ success: true })
+                } else {
+                    res.json({ success: false })
+                }
+
+            })
+        } else {
+            res.json({ success: false })
+        }
+    })
+    .get(auth.verifyAccess, (req, res, next) => { // Gets user data
+        const { _id } = req.params
+
+        User.findOne({ _id }, (err, user) => {
+            if (err)
+                return res.json({ success: false })
 
             if (user) {
-                res.json({ success: true })
-            } else {
-                res.json({ success: false })
-            }
+                const userData = {
+                    phone: user.phone,
+                    dob: user.dob,
+                }
 
+                res.json(userData)
+                return true
+            }
         })
-    } else {
-        res.json({ success: false })
-    }
-})
+    })
 
 // User login route
 usersRouter.post('/login', (req, res, next) => {

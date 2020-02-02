@@ -14,29 +14,13 @@ import { useHistory } from 'react-router-dom'
 export default function RegisterForm({ setContainer, authenticate }) {
     const [formStatus, setFormStatus] = useState(),
         [formMsg, setFormMsg] = useState(),
-        [email, setEmail] = useState(),
         history = useHistory()
 
     const RegisterSchema = Yup.object().shape({
         register: Yup.object().shape({
             email: Yup.string().trim()
                 .required('Email is required')
-                .email("Email must be valid")
-                .test('email-exists', "Email is already registered", async (typedEmail) => {
-                    // Checks to see if new email was typed so server doesn't get spammed
-                    if (typedEmail !== email) {
-                        await axios.get(`/users/email/${typedEmail}/verify`).then(res => {
-                            const { found } = res.data
-                            setEmail(typedEmail)
-
-                            if (found) {
-                                return false // Email found
-                            }
-
-                            return true // Email not found
-                        })
-                    }
-                }),
+                .email("Email must be valid"),
             password: Yup.string()
                 .required('Password is required')
                 .min(6, 'Password must be longer than 6 characters')

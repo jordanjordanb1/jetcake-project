@@ -10,11 +10,14 @@ const Address = React.lazy(() => import('./Address/Address'))
 const ProfilePicture = React.lazy(() => import('./ProfilePicture/ProfilePicture'))
 
 export default function Setup() {
-    const { token, hasSecurity, hasAddress, hasProfilePic } = useSelector(state => state.user)
+    const token = useSelector(state => state.user.token),
+        hasAddress = useSelector(state => state.user.hasAddress),
+        hasSecurity = useSelector(state => state.user.hasSecurity),
+        hasProfilePic = useSelector(state => state.user.hasProfilePic)
 
     return (
         <Container>
-            <Row className="mt-xs-2 mt-4">
+            <Row className="mt-xs-2 mt-4">ewrwer
                 <Col xs='12' md={{ span: 6, offset: 3 }}>
                     {
                         !hasSecurity ?

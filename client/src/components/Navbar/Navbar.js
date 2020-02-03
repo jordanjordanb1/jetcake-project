@@ -1,8 +1,8 @@
 import React from 'react'
 import Navbar from 'react-bootstrap/Navbar'
-import Nav from 'react-bootstrap/Nav'
 import Container from 'react-bootstrap/Container'
-import { Link } from 'react-router-dom'
+import Nav from 'react-bootstrap/Nav'
+import { NavLink } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { logOut } from '../../redux/ActionCreators'
 
@@ -14,12 +14,12 @@ export default function NavbarComponent() {
             <Navbar bg="light">
                 <Container>
                     <Nav>
-                        <Link className="nav-link" to="/dashboard"><i className="fas fa-home"></i> Home</Link>
-                        <Link className="nav-link" to="/settings"><i className="fas fa-cog"></i> Settings</Link>
+                        <NavLink className="nav-link" to="/dashboard"><i className="fas fa-home"></i> Home</NavLink>
+                        <NavLink className="nav-link" to="/settings"><i className="fas fa-cog"></i> Settings</NavLink>
                     </Nav>
 
                     <Nav className="ml-auto">
-                        <Link className="nav-link" onClick={() => dispatch(logOut())} to="/"><i className="fas fa-sign-out-alt"></i> Logout</Link>
+                        <NavLink className="nav-link" onClick={() => dispatch(logOut())} to="/"><i className="fas fa-sign-out-alt"></i> Logout</NavLink>
                     </Nav>
                 </Container>
             </Navbar>

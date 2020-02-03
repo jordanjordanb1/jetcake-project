@@ -57,8 +57,8 @@ export default function RegisterForm({ setContainer, authenticate }) {
             validationSchema={RegisterSchema}
 
             onSubmit={
-                async ({ register: { email, password, passwordConf, phone, dob } }, { setSubmitting }) => {
-                    await axios.post('/users/register', { email, password, passwordConf, phone, dob }).then(({ data: { success, msg, token } }) => {
+                ({ register: { email, password, passwordConf, phone, dob } }, { setSubmitting }) => {
+                    axios.post('/users/register', { email, password, passwordConf, phone, dob }).then(({ data: { success, msg, token } }) => {
                         setSubmitting(true) // Sets submitting to true so inputs can't be editted
 
                         if (success) {

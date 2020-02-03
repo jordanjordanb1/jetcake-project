@@ -18,9 +18,10 @@ export default function AuthGuard({ children, ...rest }) {
             render={() => {
                 if (isAuthenticated && token && email) {
                     if (!hasSecurity || !hasAddress || !hasProfilePic) {
-                        if (location.pathname !== '/setup') {
+                        if (location.pathname === '/setup')
+                            return children
+                        else
                             return <Redirect to="/setup" />
-                        } else { return children }
                     } else {
                         return children
                     }

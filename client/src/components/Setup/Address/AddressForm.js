@@ -42,7 +42,7 @@ export default function AddressForm({ token }) {
                 .required("Please choose a state"),
             zip: Yup.string()
                 .min(4, "Zip code is invalid")
-                .max(5, "Zip code is invalid")
+                .max(6, "Zip code is invalid")
                 .required("Zip code is required")
         }),
     })
@@ -78,7 +78,7 @@ export default function AddressForm({ token }) {
                                 payload: true
                             })
 
-                            return history.replace('/dashboard')
+                            return history.push('/dashboard')
                         }
 
 

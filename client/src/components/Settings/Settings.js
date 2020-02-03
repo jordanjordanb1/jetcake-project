@@ -32,7 +32,7 @@ export default function Settings() {
 
     const redirectTo = path => {
         setTimeout(() => {
-            history.replace(path)
+            history.push(path)
         }, 1000)
     }
 

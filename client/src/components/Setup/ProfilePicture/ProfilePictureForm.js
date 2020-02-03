@@ -45,7 +45,7 @@ export default function ProfilePictureForm({ token }) {
 
                 return setTimeout(() => {
                     history.push('/dashboard')
-                })
+                }, 500)
             }
 
             setFormStatus(false)
@@ -56,7 +56,7 @@ export default function ProfilePictureForm({ token }) {
     }
 
     return (
-        <Form onSubmit={handleSubmit} encType="multipart/form-data">
+        <Form onSubmit={handleSubmit}>
             <Row>
                 <Col xs={{ span: 10, offset: 1 }}>
                     <hr />

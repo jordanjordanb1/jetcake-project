@@ -127,16 +127,16 @@ usersRouter.post('/profilepicture/:_id', auth.verifyAccess, (req, res, next) => 
 
     fs.writeFile(`./public/images/profileimage/${_id}.png`, base64Image, { encoding: 'base64' }, err => {
         if (err)
-            res.json({ success: false })
+            return res.json({ success: false })
     })
 
     Jimp([`./public/images/profileimage/${_id}.png`], 500, undefined, 80)
 
     User.findByIdAndUpdate({ _id }, { profileImg: `${_id}.png` }, (err, user) => {
         if (err)
-            res.json({ success: false })
+            return res.json({ success: false })
 
-        res.json({ success: true })
+        return res.json({ success: true })
     })
 })
 

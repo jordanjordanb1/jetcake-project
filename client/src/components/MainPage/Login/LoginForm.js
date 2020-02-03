@@ -56,7 +56,7 @@ export default function LoginForm({ setContainer, authenticate, checkUser }) {
                             authenticate(token, email, security_questions, address, profileImg) // Adds token and email to redux store for easy access
 
                             if (!security_questions || !address || !profileImg) {
-                                setTimeout(() => history.push('/login'), 500)
+                                setTimeout(() => history.push('/setup'), 500)
                             } else {
                                 setTimeout(() => history.push('/dashboard'), 500)
                             }

@@ -5,7 +5,7 @@ import AddressForm from './AddressForm'
 
 export default function Address({ token }) {
     return (
-        <div className='user-check-cards'>
+        <div className='card-containers user-check-cards'>
             <Row className="text-center">
                 <Col xs="12" className=" mt-4 mb-2">
                     <h1>ADDRESS</h1>

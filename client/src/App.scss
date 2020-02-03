@@ -4,6 +4,75 @@
     box-shadow: none;
 }
 
+.card-containers {
+    position: absolute;
+    width: 100%;
+    background: white;
+    z-index: 1;
+    border-radius: 5px;
+    box-shadow: 3px 3px 5px -2px rgba(0, 0, 0, 0.3);
+    margin-left: -10px;
+
+    h1 {
+        font-family: "Dosis", sans-serif;
+    }
+
+    .form-error {
+        background: red;
+        font-family: "Dosis", sans-serif;
+        color: white;
+        border: none;
+        padding: 5px;
+        animation: show 500ms forwards ease-in;
+    }
+
+    .form-success {
+        background: green;
+        font-family: "Dosis", sans-serif;
+        color: white;
+        border: none;
+        padding: 5px;
+        animation: show 500ms forwards ease-in;
+    }
+
+    .home-inputs,
+    .user-check-inputs,
+    .settings-input {
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+        border-bottom: 2px solid var(--purp);
+        transition: border 500ms;
+
+        &:hover {
+            border-bottom: 2px solid #b692ff;
+        }
+
+        &:focus-within {
+            border-bottom: 2px solid #25006e;
+        }
+
+        &:disabled:hover {
+            cursor: not-allowed;
+        }
+
+        .input-group-text {
+            background: none;
+            border: none;
+            border-radius: initial;
+        }
+
+        input {
+            background: transparent;
+            border-radius: initial;
+            border: none;
+            font-family: "Roboto";
+            font-weight: 100;
+            box-shadow: none;
+        }
+    }
+}
+
 @keyframes show {
     0% {
         opacity: 0;

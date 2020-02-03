@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
 import './Setup.scss'
 import Row from 'react-bootstrap/Row'
@@ -19,51 +19,43 @@ export default function Setup() {
 
     if (!hasSecurity) {
         return (
-            <Suspense fallback={<div>Loading...</div>}>
-                <Container>
-                    <Row className="mt-xs-2 mt-4">
-                        <Col xs='12' md={{ span: 6, offset: 3 }}>
-                            <SecurityQuestions token={token} />
-                        </Col>
-                    </Row>
-                </Container>
-            </Suspense>
+            <Container>
+                <Row className="mt-xs-2 mt-4">
+                    <Col xs='12' md={{ span: 6, offset: 3 }}>
+                        <SecurityQuestions token={token} />
+                    </Col>
+                </Row>
+            </Container>
         )
     }
 
     if (!hasAddress) {
         return (
-            <Suspense fallback={<div>Loading...</div>}>
-                <Container>
-                    <Row className="mt-xs-2 mt-4">
-                        <Col xs='12' md={{ span: 6, offset: 3 }}>
-                            <Address token={token} />
-                        </Col>
-                    </Row>
-                </Container>
-            </Suspense >
+            <Container>
+                <Row className="mt-xs-2 mt-4">
+                    <Col xs='12' md={{ span: 6, offset: 3 }}>
+                        <Address token={token} />
+                    </Col>
+                </Row>
+            </Container>
         )
     }
 
 
     if (!hasProfilePic) {
         return (
-            <Suspense fallback={<div>Loading...</div>}>
-                <Container>
-                    <Row className="mt-xs-2 mt-4">
-                        <Col xs='12' md={{ span: 6, offset: 3 }}>
-                            <ProfilePicture token={token} />
-                        </Col>
-                    </Row>
-                </Container>
-            </Suspense >
+            <Container>
+                <Row className="mt-xs-2 mt-4">
+                    <Col xs='12' md={{ span: 6, offset: 3 }}>
+                        <ProfilePicture token={token} />
+                    </Col>
+                </Row>
+            </Container>
         )
     }
 
 
     return (
-        <Suspense fallback={<div>Loading...</div>}>
-            <Redirect to="/dashboard" />
-        </Suspense>
+        <Redirect to="/dashboard" />
     )
 }

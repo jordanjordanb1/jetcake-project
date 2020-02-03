@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col'
 import Image from 'react-bootstrap/Image'
 import Card from 'react-bootstrap/Card'
 import Footer from '../Footer/Footer'
+import './Dashboard.scss'
 
 export default function Dashboard() {
     return (
@@ -13,13 +14,13 @@ export default function Dashboard() {
             <Navbar />
 
             <Container>
-                <Card>
+                <Card className="card-containers dashboard">
                     <Card.Body>
                         <Row>
-                            <Col xs="12" md="4">
+                            <Col xs="12" md="4" className="hero-img-container">
                                 <Image src="https://i.pinimg.com/originals/1d/da/7b/1dda7b4e6b8298cbd99a70b1cccd2c34.jpg" fluid />
                             </Col>
-                            <Col xs="12" md="6">
+                            <Col xs="12" md="8">
                                 <p>
                                     Iron Man is a superhero who wears a suit of armor. His alter ego is Tony Stark.
                                     He was created by Stan Lee, Jack Kirby and Larry Lieber for Marvel Comics in Tales of Suspense #39 in the year 1963 and appears in their comic books.

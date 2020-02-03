@@ -6,6 +6,7 @@ import { store, persistor } from './redux/ConfigureStore'
 import { PersistGate } from 'redux-persist/integration/react'
 import Main from './components/MainPage/Main';
 import AuthGuard from './components/AuthGuard/AuthGuard';
+import Loader from './components/Loader/Loader'
 
 const Dashboard = React.lazy(
     () => import('./components/Dashboard/Dashboard')
@@ -21,32 +22,30 @@ const Setup = React.lazy(
 
 export default function App() {
     return (
-        <React.StrictMode>
-            <Provider store={store}>
-                <PersistGate loading={null} persistor={persistor}>
-                    <BrowserRouter>
-                        <Suspense fallback={<div>Loading...</div>}>
-                            <Switch>
-                                <Route exact path="/">
-                                    <Main />
-                                </Route>
+        <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+                <BrowserRouter>
+                    <Suspense fallback={<Loader />}>
+                        <Switch>
+                            <Route exact path="/">
+                                <Main />
+                            </Route>
 
-                                <AuthGuard path={'/dashboard'}>
-                                    <Dashboard />
-                                </AuthGuard>
+                            <AuthGuard path={'/dashboard'}>
+                                <Dashboard />
+                            </AuthGuard>
 
-                                <AuthGuard path={"/setup"}>
-                                    <Setup />
-                                </AuthGuard>
+                            <AuthGuard path={"/setup"}>
+                                <Setup />
+                            </AuthGuard>
 
-                                <AuthGuard path={"/settings"}>
-                                    <Settings />
-                                </AuthGuard>
-                            </Switch>
-                        </Suspense>
-                    </BrowserRouter>
-                </PersistGate>
-            </Provider >
-        </React.StrictMode>
+                            <AuthGuard path={"/settings"}>
+                                <Settings />
+                            </AuthGuard>
+                        </Switch>
+                    </Suspense>
+                </BrowserRouter>
+            </PersistGate>
+        </Provider >
     );
 }

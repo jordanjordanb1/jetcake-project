@@ -5,6 +5,7 @@ import Nav from 'react-bootstrap/Nav'
 import { NavLink } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { logOut } from '../../redux/ActionCreators'
+import './Navbar.scss'
 
 export default function NavbarComponent() {
     const dispatch = useDispatch()

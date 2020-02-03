@@ -5,7 +5,7 @@ import SecurityQuestionsForm from './SecurityQuestionsForm'
 
 export default function SecurityQuestions({ token }) {
     return (
-        <div className='user-check-cards'>
+        <div className='card-containers user-check-cards'>
             <Row className="text-center">
                 <Col xs="12" className=" mt-4 mb-2">
                     <h1>SECURITY QUESTIONS</h1>

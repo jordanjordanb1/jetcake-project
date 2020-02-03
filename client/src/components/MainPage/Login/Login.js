@@ -5,8 +5,10 @@ import './Login.scss'
 import LoginForm from './LoginForm'
 
 export default function Login({ container, setContainer, authenticate, checkUser }) {
+    const defaultClasses = 'login-container card-containers home-cards'
+
     return (
-        <div className={(container === 1) ? 'login-container home-cards hide-login' : (container === 0) ? 'login-container home-cards show-login' : 'login-container home-cards'}>
+        <div className={(container === 1) ? `${defaultClasses} hide-login` : (container === 0) ? `${defaultClasses} show-login` : defaultClasses}>
             <Row className="text-center mt-4 mb-2">
                 <Col xs="12">
                     <h1>LOGIN</h1>

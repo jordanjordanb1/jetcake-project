@@ -1,4 +1,12 @@
 .footer {
     background: rgb(255, 255, 255);
     padding: 50px;
+    font-family: "Dosis", sans-serif;
+    box-shadow: inset 0px 3px 5px -1px rgba(0, 0, 0, 0.3);
+
+    .devider {
+        position: relative;
+        top: 5px;
+        font-size: 2em;
+    }
 }

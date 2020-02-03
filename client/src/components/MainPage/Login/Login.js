@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col'
 import './Login.scss'
 import LoginForm from './LoginForm'
 
-export default function Login({ container, setContainer, authenticate, checkUser }) {
+export default function Login({ container, setContainer, checkUser }) {
     const defaultClasses = 'login-container card-containers home-cards'
 
     return (
@@ -18,7 +18,7 @@ export default function Login({ container, setContainer, authenticate, checkUser
 
             <Row>
                 <Col xs="12">
-                    <LoginForm setContainer={setContainer} authenticate={authenticate} checkUser={checkUser} />
+                    <LoginForm setContainer={setContainer} checkUser={checkUser} />
                 </Col>
             </Row>
         </div>

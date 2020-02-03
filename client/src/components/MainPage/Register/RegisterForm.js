@@ -10,11 +10,14 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { authenticate } from '../../../redux/ActionCreators'
 
-export default function RegisterForm({ setContainer, authenticate }) {
+export default function RegisterForm({ setContainer }) {
     const [formStatus, setFormStatus] = useState(),
         [formMsg, setFormMsg] = useState(),
-        history = useHistory()
+        history = useHistory(),
+        dispatch = useDispatch()
 
     const RegisterSchema = Yup.object().shape({
         register: Yup.object().shape({
@@ -65,7 +68,7 @@ export default function RegisterForm({ setContainer, authenticate }) {
                             setFormStatus(true)
                             setFormMsg(msg)
 
-                            authenticate(token, email) // Adds token and email to redux store for easy access
+                            dispatch(authenticate(token, email)) // Adds token and email to redux store for easy access
 
                             setTimeout(history.push('/setup'), 500) // Redirects to security question step
 

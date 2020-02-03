@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col'
 import './Register.scss'
 import RegisterForm from './RegisterForm'
 
-export default function Register({ container, setContainer, authenticate }) {
+export default function Register({ container, setContainer }) {
     const defaultClasses = 'register-container card-containers home-cards'
 
     return (
@@ -17,7 +17,7 @@ export default function Register({ container, setContainer, authenticate }) {
 
             <Row>
                 <Col xs="12">
-                    <RegisterForm setContainer={setContainer} authenticate={authenticate} />
+                    <RegisterForm setContainer={setContainer} />
                 </Col>
             </Row>
         </div>

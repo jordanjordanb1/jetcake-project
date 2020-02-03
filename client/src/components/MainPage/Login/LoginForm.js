@@ -10,11 +10,14 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { authenticate } from '../../../redux/ActionCreators'
 
-export default function LoginForm({ setContainer, authenticate, checkUser }) {
+export default function LoginForm({ setContainer, checkUser }) {
     const [formStatus, setFormStatus] = useState(),
         [formMsg, setFormMsg] = useState(),
-        history = useHistory()
+        history = useHistory(),
+        dispatch = useDispatch()
 
     const LoginSchema = Yup.object().shape({
         login: Yup.object().shape({
@@ -53,7 +56,7 @@ export default function LoginForm({ setContainer, authenticate, checkUser }) {
                             setFormMsg("Logged in successfully")
                             setSubmitting(false) // Sets submitting to true so inputs can be editted
 
-                            authenticate(token, email, security_questions, address, profileImg) // Adds token and email to redux store for easy access
+                            dispatch(authenticate(token, email, security_questions, address, profileImg)) // Adds token and email to redux store for easy access
 
                             if (!security_questions || !address || !profileImg) {
                                 setTimeout(() => history.push('/setup'), 500)

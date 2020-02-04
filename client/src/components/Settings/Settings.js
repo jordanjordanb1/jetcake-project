@@ -9,6 +9,7 @@ import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
+import Alert from 'react-bootstrap/Alert'
 import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
@@ -21,12 +22,16 @@ export default function Settings() {
         dispatch = useDispatch(),
         history = useHistory(),
         { _id } = jwt_decode(token),
-        [phone, setPhone] = useState(''),
-        [dob, setDob] = useState('')
+        [phone, setPhone] = useState('Loading...'),
+        [dob, setDob] = useState('Loading...'),
+        [dbPass, setDbPass] = useState('Loading...'),
+        [formStatus, setFormStatus] = useState(),
+        [formMsg, setFormMsg] = useState()
 
     useEffect(() => {
         axios.get(`/users/${_id}`, { headers: { 'Authorization': `Bearer ${token}` } }).then(({ data }) => {
             setPhone(data.phone)
+            setDbPass(data.phone)
             setDob(data.dob)
         })
     }, [_id, token])
@@ -35,6 +40,36 @@ export default function Settings() {
         setTimeout(() => {
             history.push(path)
         }, 1000)
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+
+        if (phone !== dbPass) {
+            if (!isNaN(phone)) {
+
+                if (phone.toString().length >= 10 && phone.toString().length <= 11) {
+
+                    axios.put(`/users/${_id}`, { tel: phone }, { headers: { 'Authorization': `Bearer ${token}` } }).then(({ data: { success } }) => {
+                        if (success) {
+                            setFormStatus(true)
+                            setFormMsg("Phone number updated")
+                        } else {
+                            setFormStatus(false)
+                            setFormMsg("An error occured")
+                        }
+                    })
+
+                } else {
+                    setFormStatus(false)
+                    setFormMsg("Phone number is invalid")
+                }
+
+            } else {
+                setFormStatus(false)
+                setFormMsg("An error occurred")
+            }
+        }
     }
 
     return (
@@ -54,12 +89,20 @@ export default function Settings() {
 
                             <Row>
                                 <Col xs="12" md={{ span: 6, offset: 3 }}>
-                                    <Form>
+                                    {
+                                        formMsg ?
+                                            (formStatus) ?
+                                                (<Alert className="mb-3 form-success text-center">{formMsg}</Alert>) :
+                                                (<Alert className="mb-3 form-error text-center">{formMsg}</Alert>)
+                                            : null
+                                    }
+
+                                    <Form onSubmit={handleSubmit}>
                                         {/* Email */}
                                         <Form.Group as={Row}>
                                             <Form.Label column xs="2" className="text-center">Email</Form.Label>
                                             <Col xs={9}>
-                                                <Form.Control className="settings-input" plaintext readOnly disabled type="email" value={email} />
+                                                <Form.Control className="settings-input" readOnly disabled type="email" value={email} />
                                             </Col>
                                         </Form.Group><br />
 
@@ -75,7 +118,7 @@ export default function Settings() {
                                         <Form.Group as={Row}>
                                             <Form.Label column xs="2" className="text-center">DOB</Form.Label>
                                             <Col xs={9}>
-                                                <Form.Control className="settings-input" plaintext readOnly disabled type="date" value={dob} />
+                                                <Form.Control className="settings-input" readOnly disabled type="date" value={dob} />
                                             </Col>
                                         </Form.Group><br />
 
@@ -88,7 +131,7 @@ export default function Settings() {
 
                             <Row>
                                 <Col xs={{ span: 10, offset: 1 }}>
-                                    <hr />
+                                    <hr className="mt-5 mb-5" />
                                 </Col>
                             </Row>
 
@@ -97,15 +140,15 @@ export default function Settings() {
                                     <ButtonGroup className="settings-button-group">
                                         <Button onClick={() => {
                                             dispatch(setHasSecurity(false))
-                                            redirectTo('/dashboard')
+                                            redirectTo('/setup')
                                         }}>Reset security questions</Button>
                                         <Button onClick={() => {
                                             dispatch(setHasAddress(false))
-                                            redirectTo('/dashboard')
+                                            redirectTo('/setup')
                                         }}>Reset address</Button>
                                         <Button onClick={() => {
                                             dispatch(setHasProfilePic(false))
-                                            redirectTo('/dashboard')
+                                            redirectTo('/setup')
                                         }}>Reset profile picture</Button>
                                     </ButtonGroup>
                                 </Col>

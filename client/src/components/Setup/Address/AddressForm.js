@@ -128,7 +128,7 @@ export default function AddressForm({ token }) {
                             </FormGroup>
 
                             <Row>
-                                <FormGroup as={Col}>
+                                <FormGroup as={Col} xs="12" md="6">
                                     <ErrorMessage name="address.state">{msg => <Alert className="mb-1 form-error text-center" variant="danger">{msg}</Alert>}</ErrorMessage>
 
                                     <InputGroup className="user-check-inputs">
@@ -145,7 +145,7 @@ export default function AddressForm({ token }) {
                                     </InputGroup>
                                 </FormGroup>
 
-                                <FormGroup as={Col}>
+                                <FormGroup as={Col} xs="12" md="6">
                                     <ErrorMessage name="address.zip">{msg => <Alert className="mb-1 form-error text-center" variant="danger">{msg}</Alert>}</ErrorMessage>
 
                                     <InputGroup className="user-check-inputs">

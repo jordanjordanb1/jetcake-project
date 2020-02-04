@@ -71,6 +71,54 @@
             box-shadow: none;
         }
     }
+
+    .file-input {
+        background: var(--purp);
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+        transition: border 500ms;
+        padding: 5px 10px;
+
+        input {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+
+            & + .file-label {
+                display: inline-block;
+                cursor: pointer;
+                margin-left: 10px;
+                color: white;
+            }
+        }
+
+        .file-label {
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            hyphens: auto;
+            display: block;
+            width: 100%;
+            height: 25px;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            position: relative;
+            top: 4px;
+        }
+
+        &:hover {
+            background: #25006e;
+        }
+    }
+
+    .file-image {
+        animation: show 1s ease-out forwards;
+        opacity: 0;
+    }
 }
 
 @keyframes show {

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { setHasProfilePic } from '../../../redux/ActionCreators'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
+import Image from 'react-bootstrap/Image'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 import jwt_decode from 'jwt-decode'
@@ -15,42 +16,64 @@ export default function ProfilePictureForm({ token }) {
     const [formStatus, setFormStatus] = useState(),
         [formMsg, setFormMsg] = useState(),
         [image, setImage] = useState(),
+        [server, setServer] = useState(false),
+        [label, setLabel] = useState('Select an image...'),
+        [changed, setChanged] = useState(false),
+        hasProfilePic = useSelector(state => state.user.hasProfilePic),
+        { _id } = jwt_decode(token),
         history = useHistory(),
         dispatch = useDispatch()
+
+    useEffect(() => {
+        if (hasProfilePic !== null && hasProfilePic === false) {
+            axios.get(`/users/${_id}`, { headers: { 'Authorization': `Bearer ${token}` } }).then(({ data }) => {
+                if (data.profileImg) {
+                    setServer(true)
+                    setLabel(data.profileImg)
+                    setImage(data.profileImg)
+                } else {
+                    return true
+                }
+            })
+        }
+    }, [_id, hasProfilePic, token])
 
     const handleSubmit = async e => {
         e.preventDefault()
 
-        const toBase64 = file => new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-        });
+        if (changed) {
+            const toBase64 = file => new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
 
-        const { _id } = jwt_decode(token),
-            imageConverted = await toBase64(image),
-            data = {
-                image: imageConverted
-            }
+            const imageConverted = await toBase64(image),
+                data = {
+                    image: imageConverted
+                }
 
-        axios.post(`/users/profilepicture/${_id}`, data, { headers: { 'Authorization': `Bearer ${token}` } }).then(({ data: { success } }) => {
-            if (success) {
-                setFormStatus(true)
-                setFormMsg("Profile image successfully uploaded")
+            axios.post(`/users/profilepicture/${_id}`, data, { headers: { 'Authorization': `Bearer ${token}` } }).then(({ data: { success } }) => {
+                if (success) {
+                    setFormStatus(true)
+                    setFormMsg("Profile image successfully uploaded")
 
-                dispatch(setHasProfilePic(true))
+                    dispatch(setHasProfilePic(true))
 
-                return setTimeout(() => {
-                    history.push('/dashboard')
-                }, 500)
-            }
+                    return setTimeout(() => {
+                        history.push('/dashboard')
+                    }, 500)
+                }
 
-            setFormStatus(false)
-            setFormMsg("An unknown error occured")
+                setFormStatus(false)
+                setFormMsg("An unknown error occured")
 
-            return false
-        })
+                return false
+            })
+        }
+
+        return false
     }
 
     return (
@@ -72,16 +95,35 @@ export default function ProfilePictureForm({ token }) {
                     }
 
                     <Form.Group>
-                        <InputGroup className="user-check-inputs">
-                            <Form.Control onChange={e => setImage(e.target.files[0])} className="form-control-file" type="file" name="picture.image" accept=".jpg,.jpeg,.png" />
+                        <InputGroup className="file-input">
+                            <Form.Control onChange={e => {
+                                setChanged(true); setServer(false); setImage(e.target.files[0]); setLabel(e.target.value.split('\\').pop());
+                            }} className="form-control-file" type="file" id="picture.image" name="picture.image" accept=".jpg,.jpeg,.png" />
+                            <Form.Label className="file-label" htmlFor="picture.image">
+                                <i className="fas fa-upload"></i>
+                                <span className="ml-2 mr-2" style={{ fontSize: "1.1em" }}>|</span>
+                                {label}
+                            </Form.Label>
                         </InputGroup>
                     </Form.Group>
+
+                    <Row>
+                        <Col xcs="12" md={{ span: 6, offset: 3 }}>
+                            {
+                                image ?
+                                    server ?
+                                        <Image className="mb-3 file-image" rounded fluid src={`/images/profileimage/${image}`} /> :
+                                        <Image className="mb-3 file-image" rounded fluid src={URL.createObjectURL(image)} /> :
+                                    null
+                            }
+                        </Col>
+                    </Row>
                 </Col>
             </Row>
 
             <Form.Group className="m-0">
                 <Button className="user-check-button" type="submit">SUBMIT</Button>
             </Form.Group>
-        </Form>
+        </Form >
     )
 }

@@ -98,8 +98,9 @@ usersRouter.route('/:_id') // Updates user account
 
             if (user) {
                 const userData = {
-                    phone: user.phone,
-                    dob: user.dob,
+                    phone: user.phone || '',
+                    dob: user.dob || '',
+                    profileImg: user.profileImg || false
                 }
 
                 res.json(userData)

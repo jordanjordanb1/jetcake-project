@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { setHasProfilePic } from '../../../redux/ActionCreators'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Row from 'react-bootstrap/Row'
@@ -38,10 +39,7 @@ export default function ProfilePictureForm({ token }) {
                 setFormStatus(true)
                 setFormMsg("Profile image successfully uploaded")
 
-                dispatch({
-                    type: 'SET_HAS_PROFILE_PIC',
-                    payload: true
-                })
+                dispatch(setHasProfilePic(true))
 
                 return setTimeout(() => {
                     history.push('/dashboard')

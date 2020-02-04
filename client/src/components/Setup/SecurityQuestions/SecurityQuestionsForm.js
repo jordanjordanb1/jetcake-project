@@ -11,6 +11,7 @@ import * as Yup from 'yup'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 import jwt_decode from 'jwt-decode'
+import { setHasSecurity } from '../../../redux/ActionCreators'
 
 export default function SecurityQuestionsForm({ token }) {
     const [formStatus, setFormStatus] = useState(),
@@ -81,10 +82,7 @@ export default function SecurityQuestionsForm({ token }) {
                             setFormMsg("Security questions updated")
 
                             // Sets user in store to have security questions filled out so next stepp will appear
-                            dispatch({
-                                type: 'SET_HAS_SECURITY',
-                                payload: true
-                            })
+                            dispatch(setHasSecurity(true))
 
                             return history.push('/dashboard')
                         }

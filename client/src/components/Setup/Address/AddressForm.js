@@ -11,6 +11,7 @@ import * as Yup from 'yup'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 import jwt_decode from 'jwt-decode'
+import { setHasAddress } from '../../../redux/ActionCreators'
 
 export default function AddressForm({ token }) {
     const [formStatus, setFormStatus] = useState(),
@@ -73,10 +74,7 @@ export default function AddressForm({ token }) {
                             setFormMsg("Address updated")
 
                             // Sets user in store to have security questions filled out so next stepp will appear
-                            dispatch({
-                                type: 'SET_HAS_ADDRESS',
-                                payload: true
-                            })
+                            dispatch(setHasAddress(true))
 
                             return history.push('/dashboard')
                         }
